@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Victoria Student Landscaping — Affordable Landscaping by Local Students</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --moss: #3a5a40;
+    --sage: #588157;
+    --fern: #6b8f71;
+    --cream: #faf8f2;
+    --sand: #f0ead6;
+    --bark: #2c1e0f;
+    --warm-white: #fffcf5;
+    --gold: #c9a227;
+    --stone: #8a8578;
+    --light-sage: #dde5d4;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--bark);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background .4s, box-shadow .4s, padding .3s;
+  }
+  nav.scrolled {
+    background: rgba(250,248,242,.92);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 1px 20px rgba(44,30,15,.08);
+    padding: .7rem 2rem;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.15rem; font-weight: 700;
+    color: var(--moss);
+    text-decoration: none;
+    letter-spacing: -.02em;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--bark); font-size: .9rem; font-weight: 500;
+    position: relative; transition: color .3s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+    background: var(--sage); transition: width .3s;
+  }
+  .nav-links a:hover { color: var(--moss); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: var(--moss) !important; color: var(--cream) !important;
+    padding: .55rem 1.3rem; border-radius: 100px;
+    font-size: .85rem !important; font-weight: 600 !important;
+    transition: background .3s, transform .2s !important;
+  }
+  .nav-cta::after { display: none !important; }
+  .nav-cta:hover { background: var(--sage) !important; transform: scale(1.04); }
+
+  /* ── NAV DROPDOWN ── */
+  .nav-dropdown-wrapper { position: relative; }
+  .nav-dropdown-wrapper > a {
+    display: flex; align-items: center; gap: .25rem;
+  }
+  .nav-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--warm-white);
+    border: 1px solid rgba(138,133,120,.12);
+    border-radius: 14px;
+    padding: .5rem;
+    list-style: none;
+    min-width: 220px;
+    box-shadow: 0 8px 30px rgba(44,30,15,.12);
+    z-index: 200;
+  }
+  .nav-dropdown-wrapper:hover .nav-dropdown { display: block; }
+  .nav-dropdown li a {
+    display: block; padding: .55rem 1rem; border-radius: 8px;
+    font-size: .875rem; white-space: nowrap;
+    color: var(--bark); text-decoration: none;
+    transition: background .2s, color .2s;
+  }
+  .nav-dropdown li a:hover { background: var(--light-sage); color: var(--moss); }
+  .nav-dropdown li a::after { display: none !important; }
+
+  /* Mobile nav */
+  .hamburger {
+    display: none; background: none; border: none; cursor: pointer;
+    width: 28px; height: 20px; position: relative; z-index: 110;
+  }
+  .hamburger span {
+    display: block; width: 100%; height: 2px; background: var(--bark);
+    position: absolute; left: 0; transition: .3s;
+  }
+  .hamburger span:nth-child(1) { top: 0; }
+  .hamburger span:nth-child(2) { top: 9px; }
+  .hamburger span:nth-child(3) { top: 18px; }
+  .hamburger.open span:nth-child(1) { top: 9px; transform: rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
+
+  .mobile-menu {
+    display: none; position: fixed; inset: 0; background: rgba(250,248,242,.97);
+    backdrop-filter: blur(20px); z-index: 105;
+    flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: var(--font-display); font-size: 1.6rem; font-weight: 500;
+    text-decoration: none; color: var(--bark); transition: color .3s;
+  }
+  .mobile-menu a:hover { color: var(--moss); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    background: linear-gradient(165deg, var(--moss) 0%, #2d4a33 50%, #1e3526 100%);
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 75% 30%, rgba(201,162,39,.12), transparent),
+      radial-gradient(ellipse 60% 80% at 20% 70%, rgba(88,129,87,.2), transparent);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 1200px; margin: 0 auto; padding: 8rem 2rem 6rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .hero-text { color: var(--cream); }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+    padding: .4rem 1rem; border-radius: 100px;
+    font-size: .78rem; font-weight: 500; letter-spacing: .05em;
+    text-transform: uppercase; color: var(--sand); margin-bottom: 1.5rem;
+    animation: fadeUp .8s ease both;
+  }
+  .hero-badge::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold); animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
+  .hero h1 {
+    font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700; line-height: 1.1; letter-spacing: -.03em;
+    margin-bottom: 1.5rem; animation: fadeUp .8s .1s ease both;
+  }
+  .hero h1 em {
+    font-style: italic; color: var(--gold);
+    text-decoration: underline; text-decoration-color: rgba(201,162,39,.3);
+    text-underline-offset: 6px; text-decoration-thickness: 2px;
+  }
+  .hero-desc {
+    font-size: 1.05rem; line-height: 1.7; opacity: .85; margin-bottom: 2rem;
+    max-width: 480px; animation: fadeUp .8s .2s ease both;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp .8s .3s ease both;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: var(--gold); color: var(--bark); padding: .85rem 2rem;
+    border-radius: 100px; font-weight: 600; font-size: .95rem;
+    text-decoration: none; transition: all .3s; border: none; cursor: pointer;
+    font-family: var(--font-body);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,162,39,.35); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: transparent; color: var(--cream); padding: .85rem 2rem;
+    border-radius: 100px; font-weight: 500; font-size: .95rem;
+    text-decoration: none; border: 1.5px solid rgba(255,255,255,.25);
+    transition: all .3s; cursor: pointer; font-family: var(--font-body);
+  }
+  .btn-secondary:hover { border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.08); }
+
+  .hero-visual {
+    position: relative; animation: fadeUp 1s .4s ease both;
+  }
+  .hero-card {
+    background: rgba(255,255,255,.08); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.1); border-radius: 24px;
+    padding: 2.5rem; position: relative; overflow: hidden;
+  }
+  .hero-card::before {
+    content: ''; position: absolute; top: -30%; right: -30%;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,162,39,.15), transparent);
+  }
+  .hero-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    position: relative; z-index: 1;
+  }
+  .stat { text-align: center; }
+  .stat-number {
+    font-family: var(--font-display); font-size: 2.2rem; font-weight: 700;
+    color: var(--gold); line-height: 1;
+  }
+  .stat-label {
+    font-size: .8rem; color: rgba(255,255,255,.6); margin-top: .3rem;
+    text-transform: uppercase; letter-spacing: .08em;
+  }
+  .hero-testimonial {
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,.1);
+    position: relative; z-index: 1;
+  }
+  .hero-testimonial p {
+    font-style: italic; color: rgba(255,255,255,.7);
+    font-size: .9rem; line-height: 1.6;
+  }
+  .hero-testimonial cite {
+    display: block; margin-top: .5rem; font-style: normal;
+    color: rgba(255,255,255,.5); font-size: .8rem;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SERVICES ── */
+  .services {
+    padding: 7rem 2rem; max-width: 1200px; margin: 0 auto;
+  }
+  .section-label {
+    font-size: .75rem; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--sage);
+    margin-bottom: .75rem;
+  }
+  .section-title {
+    font-family: var(--font-display); font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 700; letter-spacing: -.02em; color: var(--bark);
+    margin-bottom: 1rem;
+  }
+  .section-desc {
+    font-size: 1.05rem; color: var(--stone); max-width: 560px;
+    line-height: 1.7; margin-bottom: 3.5rem;
+  }
+
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  }
+  .service-card {
+    background: var(--warm-white); border: 1px solid rgba(138,133,120,.1);
+    border-radius: 20px; padding: 2rem; position: relative;
+    overflow: hidden; transition: all .4s; cursor: pointer;
+  }
+  .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(44,30,15,.08);
+    border-color: var(--sage);
+  }
+  .service-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 1.2rem;
+    background: var(--light-sage); color: var(--moss);
+  }
+  .service-card h3 {
+    font-family: var(--font-display); font-size: 1.2rem; font-weight: 600;
+    margin-bottom: .6rem; color: var(--bark);
+  }
+  .service-card p {
+    font-size: .9rem; color: var(--stone); line-height: 1.6;
+  }
+  a.service-card { text-decoration: none; color: inherit; display: block; }
+
+  .service-tag {
+    display: inline-block; margin-top: 1rem;
+    font-size: .75rem; font-weight: 600; color: var(--sage);
+    text-transform: uppercase; letter-spacing: .08em;
+    padding: .3rem .8rem; border-radius: 100px;
+    background: var(--light-sage);
+  }
+
+  /* ── ABOUT ── */
+  .about {
+    background: var(--moss); color: var(--cream); position: relative;
+    overflow: hidden;
+  }
+  .about::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 50% 60% at 80% 20%, rgba(201,162,39,.08), transparent),
+      radial-gradient(ellipse 50% 50% at 10% 80%, rgba(107,143,113,.15), transparent);
+  }
+  .about-inner {
+    max-width: 1200px; margin: 0 auto; padding: 7rem 2rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .about .section-label { color: var(--gold); }
+  .about .section-title { color: var(--cream); }
+  .about-text { font-size: 1.05rem; line-height: 1.8; opacity: .85; }
+  .about-text p + p { margin-top: 1rem; }
+
+  .about-features {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem;
+  }
+  .about-feature {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px; padding: 1.5rem;
+  }
+  .about-feature-icon {
+    font-size: 1.5rem; margin-bottom: .6rem;
+  }
+  .about-feature h4 {
+    font-family: var(--font-display); font-size: 1rem; font-weight: 600;
+    margin-bottom: .3rem;
+  }
+  .about-feature p {
+    font-size: .82rem; opacity: .6; line-height: 1.5;
+  }
+
+  .about-right {
+    display: flex; flex-direction: column; gap: 1.5rem;
+  }
+  .about-quote-card {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 20px; padding: 2.5rem; position: relative;
+  }
+  .about-quote-card::before {
+    content: '"'; font-family: var(--font-display); font-size: 5rem;
+    color: var(--gold); opacity: .3; position: absolute; top: .5rem; left: 1.5rem;
+    line-height: 1;
+  }
+  .about-quote-card blockquote {
+    font-family: var(--font-display); font-size: 1.2rem; font-weight: 300;
+    font-style: italic; line-height: 1.6; position: relative; z-index: 1;
+  }
+  .about-values {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+  }
+  .about-value {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px; padding: 1.2rem; text-align: center;
+  }
+  .about-value-num {
+    font-family: var(--font-display); font-size: 1.6rem; font-weight: 700;
+    color: var(--gold);
+  }
+  .about-value-label {
+    font-size: .75rem; text-transform: uppercase; letter-spacing: .06em;
+    opacity: .5; margin-top: .2rem;
+  }
+
+  /* ── CONTACT ── */
+  .contact {
+    padding: 7rem 2rem; max-width: 1200px; margin: 0 auto;
+  }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start;
+  }
+  .contact-info-card {
+    background: var(--moss); color: var(--cream); border-radius: 24px;
+    padding: 3rem; position: relative; overflow: hidden;
+  }
+  .contact-info-card::before {
+    content: ''; position: absolute; bottom: -40px; right: -40px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,162,39,.15), transparent);
+  }
+  .contact-info-card h3 {
+    font-family: var(--font-display); font-size: 1.6rem; font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .contact-info-card > p {
+    opacity: .75; line-height: 1.6; margin-bottom: 2rem; font-size: .95rem;
+  }
+  .contact-detail {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem;
+  }
+  .contact-detail-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(255,255,255,.1); display: flex;
+    align-items: center; justify-content: center; font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .contact-detail-text small {
+    display: block; font-size: .75rem; opacity: .5;
+    text-transform: uppercase; letter-spacing: .06em;
+  }
+  .contact-detail-text span {
+    font-weight: 500; font-size: .95rem;
+  }
+  .contact-detail-text a {
+    color: var(--cream); text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,.2);
+    transition: border-color .3s;
+  }
+  .contact-detail-text a:hover { border-color: var(--gold); }
+
+  .contact-hours {
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,.1);
+  }
+  .contact-hours h4 {
+    font-size: .8rem; text-transform: uppercase; letter-spacing: .08em;
+    opacity: .5; margin-bottom: .8rem;
+  }
+  .hours-row {
+    display: flex; justify-content: space-between; font-size: .9rem;
+    padding: .3rem 0;
+  }
+  .hours-row span:last-child { opacity: .7; }
+
+  /* Form */
+  .contact-form-wrapper {
+    background: var(--warm-white); border: 1px solid rgba(138,133,120,.1);
+    border-radius: 24px; padding: 2.5rem;
+  }
+  .contact-form-wrapper h3 {
+    font-family: var(--font-display); font-size: 1.4rem; font-weight: 600;
+    margin-bottom: .5rem; color: var(--bark);
+  }
+  .contact-form-wrapper > p {
+    color: var(--stone); font-size: .9rem; margin-bottom: 2rem;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label {
+    display: block; font-size: .82rem; font-weight: 600;
+    color: var(--bark); margin-bottom: .4rem;
+    letter-spacing: .02em;
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: .8rem 1rem; border: 1.5px solid rgba(138,133,120,.15);
+    border-radius: 12px; font-family: var(--font-body); font-size: .92rem;
+    background: var(--cream); color: var(--bark); transition: border-color .3s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--sage);
+  }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+
+  .form-submit {
+    width: 100%; padding: 1rem; border: none; border-radius: 14px;
+    background: var(--moss); color: var(--cream);
+    font-family: var(--font-body); font-size: 1rem; font-weight: 600;
+    cursor: pointer; transition: all .3s; margin-top: .5rem;
+  }
+  .form-submit:hover { background: var(--sage); transform: translateY(-2px); }
+  .form-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+  .form-success {
+    display: none; text-align: center; padding: 2rem;
+  }
+  .form-success.show { display: block; }
+  .form-success-icon {
+    width: 64px; height: 64px; margin: 0 auto 1rem;
+    background: var(--light-sage); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; color: var(--moss);
+  }
+  .form-success h4 {
+    font-family: var(--font-display); font-size: 1.3rem;
+    color: var(--bark); margin-bottom: .5rem;
+  }
+  .form-success p { color: var(--stone); font-size: .9rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bark); color: var(--cream); padding: 4rem 2rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem;
+  }
+  .footer-brand {
+    font-family: var(--font-display); font-size: 1.2rem; font-weight: 700;
+    margin-bottom: .8rem;
+  }
+  .footer-brand span { color: var(--gold); }
+  .footer-desc { font-size: .88rem; opacity: .5; line-height: 1.6; max-width: 320px; }
+  .footer-col h4 {
+    font-size: .75rem; text-transform: uppercase; letter-spacing: .1em;
+    opacity: .4; margin-bottom: 1rem;
+  }
+  .footer-col a {
+    display: block; color: var(--cream); text-decoration: none;
+    font-size: .9rem; opacity: .65; margin-bottom: .6rem; transition: opacity .3s;
+  }
+  .footer-col a:hover { opacity: 1; }
+  .footer-bottom {
+    max-width: 1200px; margin: 3rem auto 0; padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: .8rem; opacity: .4;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .reveal {
+    opacity: 0; transform: translateY(40px); transition: all .8s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 960px) {
+    .hero-content { grid-template-columns: 1fr; text-align: center; }
+    .hero-desc { margin-left: auto; margin-right: auto; }
+    .hero-actions { justify-content: center; }
+    .hero-visual { max-width: 480px; margin: 0 auto; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: .5rem; text-align: center; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .hamburger { display: block; }
+    .services-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .about-features { grid-template-columns: 1fr; }
+    .about-values { grid-template-columns: 1fr; }
+    .hero-stats { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Victoria Student <span>Landscaping</span></a>
+  <ul class="nav-links">
+    <li class="nav-dropdown-wrapper">
+      <a href="#services">Services ▾</a>
+      <ul class="nav-dropdown">
+        <li><a href="general-maintenance.html">General Maintenance</a></li>
+        <li><a href="planting.html">Planting</a></li>
+        <li><a href="patio-paver.html">Patio Paver &amp; Interlock</a></li>
+        <li><a href="pruning.html">Pruning</a></li>
+        <li><a href="hedging.html">Hedging</a></li>
+        <li><a href="custom-landscapes.html">Custom Landscapes</a></li>
+      </ul>
+    </li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="quote.html" class="nav-cta">Free Quote</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="portfolio.html" onclick="closeMobile()">Portfolio</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-badge">Student-Powered · Victoria, BC</div>
+      <h1>Beautiful landscapes, <em>bright futures</em></h1>
+      <p class="hero-desc">Affordable, professional landscaping services by dedicated local students. Every job funds a university education — your yard looks amazing, and you make a difference.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Get a Free Quote →</a>
+        <a href="#services" class="btn-secondary">Our Services</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">Happy Clients</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">6</div>
+            <div class="stat-label">Core Services</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">5★</div>
+            <div class="stat-label">Avg. Rating</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">3+</div>
+            <div class="stat-label">Years Running</div>
+          </div>
+        </div>
+        <div class="hero-testimonial">
+          <p>"The team was professional, affordable, and made our front yard look incredible. So glad we're supporting local students too!"</p>
+          <cite>— Homeowner, Oak Bay</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="reveal">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">Services tailored to your outdoor space</h2>
+    <p class="section-desc">From routine lawn care to custom landscape design, we bring creativity and care to every project — at prices that respect your budget.</p>
+  </div>
+
+  <div class="services-grid">
+    <a href="general-maintenance.html" class="service-card reveal">
+      <div class="service-icon">🌿</div>
+      <h3>General Maintenance</h3>
+      <p>Mowing, edging, weeding, leaf removal, and seasonal cleanups to keep your yard pristine year-round.</p>
+      <span class="service-tag">Most Popular</span>
+    </a>
+    <a href="planting.html" class="service-card reveal">
+      <div class="service-icon">🌺</div>
+      <h3>Planting</h3>
+      <p>Garden bed design, flower planting, mulching, and soil preparation to bring colour and life to your landscape.</p>
+      <span class="service-tag">Seasonal</span>
+    </a>
+    <a href="patio-paver.html" class="service-card reveal">
+      <div class="service-icon">🧱</div>
+      <h3>Patio Paver &amp; Interlock</h3>
+      <p>Professional patio paver and interlock brick installation that adds beauty and value to your outdoor living space.</p>
+      <span class="service-tag">Premium</span>
+    </a>
+    <a href="pruning.html" class="service-card reveal">
+      <div class="service-icon">✂️</div>
+      <h3>Pruning</h3>
+      <p>Expert pruning of shrubs, small trees, and ornamentals to promote healthy growth and clean aesthetics.</p>
+      <span class="service-tag">Year-Round</span>
+    </a>
+    <a href="hedging.html" class="service-card reveal">
+      <div class="service-icon">🌳</div>
+      <h3>Hedging</h3>
+      <p>Precise hedge trimming and shaping for clean lines and defined boundaries around your property.</p>
+      <span class="service-tag">Year-Round</span>
+    </a>
+    <a href="custom-landscapes.html" class="service-card reveal">
+      <div class="service-icon">🎨</div>
+      <h3>Custom Landscapes</h3>
+      <p>Full landscape design and installation — from concept to completion. We create outdoor spaces that reflect your vision.</p>
+      <span class="service-tag">Design &amp; Build</span>
+    </a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="reveal">
+      <div class="section-label">Who We Are</div>
+      <h2 class="section-title">More than a landscaping company</h2>
+      <div class="about-text">
+        <p>At Victoria Student Landscaping, we believe your outdoor space is more than just a yard — it's an extension of your home, a place of peace, and a reflection of your values.</p>
+        <p>Our team of dedicated students delivers professional, affordable landscaping with the care and creativity that larger companies often lack. When you choose us, you invest in the future of local students while getting a yard that brings you joy.</p>
+      </div>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="about-feature-icon">🎓</div>
+          <h4>Student-Powered</h4>
+          <p>Every dollar supports local university tuition</p>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">💰</div>
+          <h4>Affordable Rates</h4>
+          <p>Top-quality work at student-friendly pricing</p>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">🏡</div>
+          <h4>Local & Reliable</h4>
+          <p>Proudly serving Victoria, BC and surrounding areas</p>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">⭐</div>
+          <h4>Quality Guaranteed</h4>
+          <p>We stand behind every job with care and follow-up</p>
+        </div>
+      </div>
+    </div>
+    <div class="about-right reveal">
+      <div class="about-quote-card">
+        <blockquote>Your outdoor space should bring you joy and peace of mind — knowing your choice makes a meaningful impact on the next generation.</blockquote>
+      </div>
+      <div class="about-values">
+        <div class="about-value">
+          <div class="about-value-num">100%</div>
+          <div class="about-value-label">Locally Owned</div>
+        </div>
+        <div class="about-value">
+          <div class="about-value-num">4.9★</div>
+          <div class="about-value-label">Client Rating</div>
+        </div>
+        <div class="about-value">
+          <div class="about-value-num">24hr</div>
+          <div class="about-value-label">Quote Response</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="reveal">
+    <div class="section-label">Get In Touch</div>
+    <h2 class="section-title">Ready to transform your yard?</h2>
+    <p class="section-desc">Fill out the form and we'll get back to you within 24 hours with a free quote. We can't wait to hear from you!</p>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-info-card reveal">
+      <h3>Let's talk about your project</h3>
+      <p>Whether it's a simple lawn cleanup or a full custom landscape, we'd love to hear what you have in mind.</p>
+
+      <div class="contact-detail">
+        <div class="contact-detail-icon">✉️</div>
+        <div class="contact-detail-text">
+          <small>Email</small>
+          <span><a href="mailto:info@victoriastudentlandscaping.org">info@victoriastudentlandscaping.org</a></span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">📞</div>
+        <div class="contact-detail-text">
+          <small>Phone</small>
+          <span><a href="tel:6046520910">(604) 652-0910</a></span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">📍</div>
+        <div class="contact-detail-text">
+          <small>Service Area</small>
+          <span>Victoria, BC &amp; Surrounding Areas</span>
+        </div>
+      </div>
+
+      <div class="contact-hours">
+        <h4>Availability</h4>
+        <div class="hours-row"><span>Monday – Friday</span><span>8:00 AM – 6:00 PM</span></div>
+        <div class="hours-row"><span>Saturday</span><span>9:00 AM – 5:00 PM</span></div>
+        <div class="hours-row"><span>Sunday</span><span>9:00 AM – 4:00 PM</span></div>
+      </div>
+    </div>
+
+    <div class="contact-form-wrapper reveal">
+      <h3>Send us a message</h3>
+      <p>We'll respond to your email within one business day.</p>
+
+      <!-- CONTACT FORM — uses Formspree for email delivery -->
+      <form id="contactForm" action="https://formspree.io/f/xlgwzgnv" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" required placeholder="Jane Smith">
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="(250) 555-0123">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" required placeholder="jane@example.com">
+        </div>
+        <div class="form-group">
+          <label for="service">Service Interested In</label>
+          <select id="service" name="service">
+            <option value="">Select a service...</option>
+            <option value="General Maintenance">General Maintenance</option>
+            <option value="Planting">Planting</option>
+            <option value="Patio Paver / Interlock">Patio Paver / Interlock</option>
+            <option value="Pruning">Pruning</option>
+            <option value="Hedging">Hedging</option>
+            <option value="Custom Landscape Design">Custom Landscape Design</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Tell us about your project *</label>
+          <textarea id="message" name="message" required placeholder="Describe what you're looking for — size of yard, specific work needed, preferred timing, etc."></textarea>
+        </div>
+        <!-- Honeypot for spam protection -->
+        <input type="text" name="_gotcha" style="display:none">
+        <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <div class="form-success-icon">✓</div>
+        <h4>Message sent!</h4>
+        <p>Thanks for reaching out. We'll get back to you within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Victoria Student <span>Landscaping</span></div>
+      <p class="footer-desc">Affordable landscaping by dedicated local students. Your yard looks great, and you support education in your community.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="general-maintenance.html">General Maintenance</a>
+      <a href="planting.html">Planting</a>
+      <a href="patio-paver.html">Patio Paver</a>
+      <a href="pruning.html">Pruning</a>
+      <a href="hedging.html">Hedging</a>
+      <a href="custom-landscapes.html">Custom Landscapes</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="mailto:info@victoriastudentlandscaping.org">info@victoriastudentlandscaping.org</a>
+      <a href="tel:6046520910">(604) 652-0910</a>
+      <a href="#contact">Get a Free Quote</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Victoria Student Landscaping. All rights reserved.</span>
+    <span>Proudly serving Victoria, BC</span>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Mobile menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  function closeMobile() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Scroll reveal animations
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Form submission via Formspree (AJAX)
+  const form = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const formSuccess = document.getElementById('formSuccess');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        form.style.display = 'none';
+        formSuccess.classList.add('show');
+      } else {
+        alert('Something went wrong. Please try emailing us directly at info@victoriastudentlandscaping.org');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
+    } catch (err) {
+      alert('Network error. Please try emailing us directly at info@victoriastudentlandscaping.org');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message';
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hedging — Victoria Student Landscaping</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --moss: #3a5a40;
+    --sage: #588157;
+    --fern: #6b8f71;
+    --cream: #faf8f2;
+    --sand: #f0ead6;
+    --bark: #2c1e0f;
+    --warm-white: #fffcf5;
+    --gold: #c9a227;
+    --stone: #8a8578;
+    --light-sage: #dde5d4;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--bark);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(250,248,242,.92);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 1px 20px rgba(44,30,15,.08);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.15rem; font-weight: 700;
+    color: var(--moss); text-decoration: none; letter-spacing: -.02em;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--bark); font-size: .9rem; font-weight: 500;
+    position: relative; transition: color .3s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+    background: var(--sage); transition: width .3s;
+  }
+  .nav-links a:hover { color: var(--moss); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: var(--moss) !important; color: var(--cream) !important;
+    padding: .55rem 1.3rem; border-radius: 100px;
+    font-size: .85rem !important; font-weight: 600 !important;
+    transition: background .3s, transform .2s !important;
+  }
+  .nav-cta::after { display: none !important; }
+  .nav-cta:hover { background: var(--sage) !important; transform: scale(1.04); }
+
+  .nav-dropdown-wrapper { position: relative; }
+  .nav-dropdown-wrapper > a { display: flex; align-items: center; gap: .25rem; }
+  .nav-dropdown {
+    display: none; position: absolute; top: calc(100% + 14px); left: 50%;
+    transform: translateX(-50%); background: var(--warm-white);
+    border: 1px solid rgba(138,133,120,.12); border-radius: 14px; padding: .5rem;
+    list-style: none; min-width: 220px; box-shadow: 0 8px 30px rgba(44,30,15,.12); z-index: 200;
+  }
+  .nav-dropdown-wrapper:hover .nav-dropdown { display: block; }
+  .nav-dropdown li a {
+    display: block; padding: .55rem 1rem; border-radius: 8px; font-size: .875rem;
+    white-space: nowrap; color: var(--bark); text-decoration: none; transition: background .2s, color .2s;
+  }
+  .nav-dropdown li a:hover { background: var(--light-sage); color: var(--moss); }
+  .nav-dropdown li a::after { display: none !important; }
+
+  .hamburger {
+    display: none; background: none; border: none; cursor: pointer;
+    width: 28px; height: 20px; position: relative; z-index: 110;
+  }
+  .hamburger span {
+    display: block; width: 100%; height: 2px; background: var(--bark);
+    position: absolute; left: 0; transition: .3s;
+  }
+  .hamburger span:nth-child(1) { top: 0; }
+  .hamburger span:nth-child(2) { top: 9px; }
+  .hamburger span:nth-child(3) { top: 18px; }
+  .hamburger.open span:nth-child(1) { top: 9px; transform: rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
+
+  .mobile-menu {
+    display: none; position: fixed; inset: 0; background: rgba(250,248,242,.97);
+    backdrop-filter: blur(20px); z-index: 105;
+    flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: var(--font-display); font-size: 1.4rem; font-weight: 500;
+    text-decoration: none; color: var(--bark); transition: color .3s;
+  }
+  .mobile-menu a:hover { color: var(--moss); }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    padding: 8rem 2rem 5rem;
+    background: linear-gradient(165deg, var(--moss) 0%, #2d4a33 50%, #1e3526 100%);
+    color: var(--cream); text-align: center; position: relative; overflow: hidden;
+  }
+  .page-header::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,162,39,.1), transparent);
+    pointer-events: none;
+  }
+  .page-header-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+  .page-header-icon { font-size: 3rem; margin-bottom: 1rem; display: inline-block; }
+  .page-header-label {
+    font-size: .75rem; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: .75rem;
+  }
+  .page-header h1 {
+    font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700; letter-spacing: -.02em; margin-bottom: 1rem;
+  }
+  .page-header p { font-size: 1.05rem; opacity: .8; line-height: 1.7; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: .4rem; margin-top: 2rem;
+    color: rgba(255,255,255,.6); text-decoration: none; font-size: .88rem; transition: color .3s;
+  }
+  .back-link:hover { color: var(--gold); }
+
+  /* ── CONTENT LAYOUT ── */
+  .page-content { max-width: 960px; margin: 0 auto; padding: 5rem 2rem 4rem; }
+
+  .section-label {
+    font-size: .75rem; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--sage); margin-bottom: .6rem;
+  }
+
+  /* ── INTRO ── */
+  .intro-section { margin-bottom: 4rem; }
+  .intro-section h2 {
+    font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700; letter-spacing: -.02em; color: var(--bark);
+    margin-bottom: 1.2rem; line-height: 1.2;
+  }
+  .intro-section p { font-size: 1.05rem; color: var(--stone); line-height: 1.8; max-width: 720px; }
+
+
+  /* ── WHY CHOOSE ── */
+  .why-choose { margin-bottom: 4rem; }
+  .why-choose h2 {
+    font-family: var(--font-display); font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700; letter-spacing: -.02em; color: var(--bark);
+    margin-bottom: .8rem; line-height: 1.2;
+  }
+  .why-choose > p {
+    font-size: 1rem; color: var(--stone); line-height: 1.8; margin-bottom: 2.5rem; max-width: 680px;
+  }
+  .features-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2.5rem;
+  }
+  .feature-card {
+    background: var(--warm-white); border: 1px solid rgba(138,133,120,.1);
+    border-radius: 18px; padding: 1.75rem; transition: box-shadow .3s, border-color .3s;
+  }
+  .feature-card:hover { box-shadow: 0 8px 30px rgba(44,30,15,.07); border-color: var(--light-sage); }
+  .feature-card-title {
+    font-family: var(--font-display); font-size: 1.05rem; font-weight: 600;
+    color: var(--bark); margin-bottom: .5rem;
+  }
+  .feature-card-title span { display: inline-block; margin-right: .4rem; color: var(--sage); }
+  .feature-card p { font-size: .9rem; color: var(--stone); line-height: 1.65; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: var(--moss); color: var(--cream); padding: .9rem 2.2rem;
+    border-radius: 100px; font-weight: 600; font-size: .95rem;
+    text-decoration: none; transition: all .3s;
+  }
+  .btn-primary:hover { background: var(--sage); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(58,90,64,.3); }
+
+  /* ── SERVICES INCLUDE ── */
+  .services-include { margin-bottom: 4rem; }
+  .services-include h2 {
+    font-family: var(--font-display); font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700; letter-spacing: -.02em; color: var(--bark);
+    margin-bottom: 1.75rem; line-height: 1.2;
+  }
+  .services-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+  .services-list li {
+    background: var(--warm-white); border: 1px solid rgba(138,133,120,.1);
+    border-radius: 14px; padding: 1.4rem 1.75rem;
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    transition: border-color .3s, box-shadow .3s;
+  }
+  .services-list li:hover { border-color: var(--light-sage); box-shadow: 0 4px 20px rgba(44,30,15,.06); }
+  .services-list-icon {
+    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+    background: var(--light-sage); display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; margin-top: .1rem;
+  }
+  .services-list-body strong {
+    display: block; font-weight: 600; font-size: .95rem; color: var(--bark); margin-bottom: .25rem;
+  }
+  .services-list-body p { font-size: .88rem; color: var(--stone); line-height: 1.6; }
+
+  /* ── QUOTE CTA ── */
+  .quote-cta {
+    background: linear-gradient(135deg, var(--moss) 0%, #2d4a33 100%);
+    border-radius: 24px; padding: 3.5rem; text-align: center;
+    color: var(--cream); position: relative; overflow: hidden;
+  }
+  .quote-cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(201,162,39,.12), transparent);
+    pointer-events: none;
+  }
+  .quote-cta-inner { position: relative; z-index: 1; }
+  .quote-cta h2 {
+    font-family: var(--font-display); font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700; margin-bottom: .75rem;
+  }
+  .quote-cta p {
+    font-size: 1rem; opacity: .8; line-height: 1.7;
+    max-width: 500px; margin: 0 auto 2rem;
+  }
+  .btn-gold {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: var(--gold); color: var(--bark); padding: .9rem 2.2rem;
+    border-radius: 100px; font-weight: 600; font-size: .95rem;
+    text-decoration: none; transition: all .3s;
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,162,39,.4); }
+
+  /* ── FOOTER ── */
+  footer { background: var(--bark); color: var(--cream); padding: 4rem 2rem 2rem; }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem;
+  }
+  .footer-brand { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: .8rem; }
+  .footer-brand span { color: var(--gold); }
+  .footer-desc { font-size: .88rem; opacity: .5; line-height: 1.6; max-width: 320px; }
+  .footer-col h4 { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; opacity: .4; margin-bottom: 1rem; }
+  .footer-col a { display: block; color: var(--cream); text-decoration: none; font-size: .9rem; opacity: .65; margin-bottom: .6rem; transition: opacity .3s; }
+  .footer-col a:hover { opacity: 1; }
+  .footer-bottom {
+    max-width: 1200px; margin: 3rem auto 0; padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: .8rem; opacity: .4;
+  }
+
+  @media (max-width: 768px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .quote-cta { padding: 2.5rem 1.5rem; }
+  }
+  @media (max-width: 960px) {
+    .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: .5rem; text-align: center; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .hamburger { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="home.html" class="nav-logo">Victoria Student <span>Landscaping</span></a>
+  <ul class="nav-links">
+    <li class="nav-dropdown-wrapper">
+      <a href="home.html#services">Services ▾</a>
+      <ul class="nav-dropdown">
+        <li><a href="general-maintenance.html">General Maintenance</a></li>
+        <li><a href="planting.html">Planting</a></li>
+        <li><a href="patio-paver.html">Patio Paver &amp; Interlock</a></li>
+        <li><a href="pruning.html">Pruning</a></li>
+        <li><a href="hedging.html">Hedging</a></li>
+        <li><a href="custom-landscapes.html">Custom Landscapes</a></li>
+      </ul>
+    </li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="home.html#about">About</a></li>
+    <li><a href="home.html#contact">Contact</a></li>
+    <li><a href="quote.html" class="nav-cta">Free Quote</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="home.html#services" onclick="closeMobile()">Services</a>
+  <a href="general-maintenance.html" onclick="closeMobile()">General Maintenance</a>
+  <a href="planting.html" onclick="closeMobile()">Planting</a>
+  <a href="patio-paver.html" onclick="closeMobile()">Patio Paver</a>
+  <a href="pruning.html" onclick="closeMobile()">Pruning</a>
+  <a href="hedging.html" onclick="closeMobile()">Hedging</a>
+  <a href="custom-landscapes.html" onclick="closeMobile()">Custom Landscapes</a>
+  <a href="home.html#about" onclick="closeMobile()">About</a>
+  <a href="home.html#contact" onclick="closeMobile()">Contact</a>
+  <a href="quote.html" onclick="closeMobile()">Free Quote</a>
+</div>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🌳</div>
+    <div class="page-header-label">Our Services</div>
+    <h1>Hedging</h1>
+    <p>Precise hedge trimming and shaping for clean lines and defined boundaries around your property.</p>
+    <a href="home.html#services" class="back-link">← Back to all services</a>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="page-content">
+
+  <!-- INTRO -->
+  <section class="intro-section">
+    <h2>Hedge Trimming in Victoria, BC</h2>
+    <p>A well-maintained hedge is the perfect way to define your property, create privacy, and add a touch of elegance to your landscape. However, keeping hedges perfectly manicured can be a time-consuming and difficult task. At Victoria Student Landscaping, we provide professional and precise hedge trimming services for homeowners across Victoria, BC, and the surrounding areas.</p>
+  </section>
+
+  <!-- WHY CHOOSE -->
+  <section class="why-choose">
+    <div class="section-label">Why Us</div>
+    <h2>Why Choose Our Hedging Services?</h2>
+    <p>Victoria's climate is ideal for growing lush, beautiful hedges, but without proper care, they can quickly become overgrown and unruly. Our team of experienced students is trained in the art of proper pruning, ensuring your hedges are healthy and look their best.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-card-title"><span>✂️</span> Precision and Aesthetics</div>
+        <p>We have the tools and expertise to create clean, straight lines and perfect shapes for any type of hedge, from tall cedar privacy screens to small boxwood borders.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-title"><span>🌿</span> Promotes Plant Health</div>
+        <p>Proper trimming isn't just about looks — it's about health. We understand the right time of year to prune specific species, ensuring your hedges grow back thicker and healthier each season.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-title"><span>🦺</span> Safety and Convenience</div>
+        <p>Trimming tall or wide hedges can be dangerous without the right equipment. Our team is fully equipped to handle all sizes of hedges safely and efficiently, saving you the risk and hassle.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-title"><span>📍</span> Local Expertise</div>
+        <p>We are familiar with the common hedging species in Victoria, including cedar, laurel, and boxwood. We know what it takes to keep them thriving in our unique climate.</p>
+      </div>
+    </div>
+
+    <a href="quote.html" class="btn-primary">Request Quote →</a>
+  </section>
+
+  <!-- SERVICES INCLUDE -->
+  <section class="services-include">
+    <div class="section-label">What's Included</div>
+    <h2>Our Hedge Services Include</h2>
+    <ul class="services-list">
+      <li>
+        <div class="services-list-icon">📅</div>
+        <div class="services-list-body">
+          <strong>Routine Maintenance</strong>
+          <p>Keep your hedges looking their best with a regular trimming schedule. We can perform single-season trims or schedule recurring visits to ensure your hedges are always neat.</p>
+        </div>
+      </li>
+      <li>
+        <div class="services-list-icon">📏</div>
+        <div class="services-list-body">
+          <strong>Hedge Reductions</strong>
+          <p>We can safely and carefully reduce the height and width of overgrown hedges to restore their shape and bring more light into your yard.</p>
+        </div>
+      </li>
+      <li>
+        <div class="services-list-icon">🌳</div>
+        <div class="services-list-body">
+          <strong>Shaping and Sculpting</strong>
+          <p>Whether you prefer a traditional rectangular shape or a more natural form, we can expertly sculpt your hedges to match your desired aesthetic.</p>
+        </div>
+      </li>
+      <li>
+        <div class="services-list-icon">🧹</div>
+        <div class="services-list-body">
+          <strong>Comprehensive Cleanup</strong>
+          <p>We don't leave a mess behind. All clippings are neatly raked up and removed from your property, leaving your yard cleaner than when we arrived.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- QUOTE CTA -->
+  <section class="quote-cta">
+    <div class="quote-cta-inner">
+      <h2>Ready for perfectly manicured hedges?</h2>
+      <p>Get a free, no-obligation quote and we'll get back to you within 24 hours with a tailored estimate for your property.</p>
+      <a href="quote.html" class="btn-gold">Get a Free Quote →</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Victoria Student <span>Landscaping</span></div>
+      <p class="footer-desc">Affordable landscaping by dedicated local students. Your yard looks great, and you support education in your community.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="general-maintenance.html">General Maintenance</a>
+      <a href="planting.html">Planting</a>
+      <a href="patio-paver.html">Patio Paver</a>
+      <a href="pruning.html">Pruning</a>
+      <a href="hedging.html">Hedging</a>
+      <a href="custom-landscapes.html">Custom Landscapes</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="mailto:info@victoriastudentlandscaping.org">info@victoriastudentlandscaping.org</a>
+      <a href="tel:6046520910">(604) 652-0910</a>
+      <a href="quote.html">Get a Free Quote</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Victoria Student Landscaping. All rights reserved.</span>
+    <span>Proudly serving Victoria, BC</span>
+  </div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  function closeMobile() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+</script>
+
+</body>
+</html>
